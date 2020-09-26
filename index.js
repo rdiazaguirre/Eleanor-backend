@@ -120,21 +120,21 @@ app.use('/api/v1/board', board);
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
-// app.listen(port, function () {
-//   console.info(`Eleonor listening in port ${port}`.cyan.bold);
-// });
-
-const https = require('https');
-const fs = require('fs');
-const options = {
-  key: fs.readFileSync(process.env.CERTIFICATE_KEY_FILE),
-  cert: fs.readFileSync(process.env.CERTIFICATE_PEM_FILE)
-};
-
-https.createServer(options, function (req, res) {
-  res.writeHead(200);
-  res.end("hello world\n");
-}).listen(port, function () {
-  console.info(`Eleonor listening on https in port ${port}`.cyan.bold);
+app.listen(port, function () {
+  console.info(`Eleonor listening HTTP in port ${port}`.cyan.bold);
 });
+
+// const https = require('https');
+// const fs = require('fs');
+// const options = {
+//   key: fs.readFileSync(process.env.CERTIFICATE_KEY_FILE),
+//   cert: fs.readFileSync(process.env.CERTIFICATE_PEM_FILE)
+// };
+
+// https.createServer(options, function (req, res) {
+//   res.writeHead(200);
+//   res.end("hello world\n");
+// }).listen(port, function () {
+//   console.info(`Eleonor listening on HTTPS in port ${port}`.cyan.bold);
+// });
 
