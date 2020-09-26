@@ -230,9 +230,9 @@ exports.validateCode = async (codeIn) => {
         throw new ErrorResponse(`Code ${codeIn.code} has already been validated.`, 406)
     }
 
-    if (Date.now() > code.date) {
-        throw new ErrorResponse(`Code ${codeIn.code} has expired`, 406)
-    }
+    // if (Date.now() > code.date) {
+    //     throw new ErrorResponse(`Code ${codeIn.code} has expired`, 406)
+    // }
 
     if (code.email !== codeIn.email) {
         throw new ErrorResponse(`Email for ${codeIn.code} is not valid`, 406)
