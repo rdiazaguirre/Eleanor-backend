@@ -1,19 +1,19 @@
 var nodemailer = require("nodemailer");
-exports.sendNewUserEmail = async (name, email, code) => {
+exports.sendNewUserEmail = async(name, email, code) => {
     const to = [{ name: name, email: email }];
     const from = [{ name: process.env.USER_MAIL_NAME, email: process.env.USER_MAIL_EMAIL }];
     const subject = process.env.EMAIL_SUBJECT_NEW_USER;
     const body = await this.templateNewUserEmail(code);
     await this.sendEmail(to, from, subject, body);
 }
-exports.sendResetPasswordEmail = async (options) => {
+exports.sendResetPasswordEmail = async(options) => {
     const to = [{ name: options.name, email: options.email }];
     const from = [{ name: process.env.USER_MAIL_NAME, email: process.env.USER_MAIL_EMAIL }];
     const subject = process.env.EMAIL_SUBJECT_RESET_PASSWORD;
     const body = await this.templateResetPasswordEmail(options.code);
     await this.sendEmail(to, from, subject, body);
 }
-exports.templateNewUserEmail = async (options) => {
+exports.templateNewUserEmail = async(options) => {
     return `<b>Hola, Soy Eleanor</b>
     <br/>
     <p>
@@ -29,7 +29,7 @@ exports.templateNewUserEmail = async (options) => {
     Debe establecer su contraseña <a href="${process.env.RESET_PASSWORD_URI}"><strong>aquí</strong></a>.
     </p>`
 }
-exports.templateResetPasswordEmail = async (options) => {
+exports.templateResetPasswordEmail = async(options) => {
     return `<b>Hola, Soy Eleanor</b>
     <br/>
     <p>
@@ -45,7 +45,7 @@ exports.templateResetPasswordEmail = async (options) => {
     Restablezca su contraseña <a href="${process.env.RESET_PASSWORD_URI}"><strong>aquí</strong></a>.
     </p>`
 }
-exports.templateActivateAccount = async (options) => {
+exports.templateActivateAccount = async(options) => {
     return `<b>Hola, Soy Eleanor</b>
     <br/>
     <p>
@@ -59,7 +59,7 @@ exports.templateActivateAccount = async (options) => {
     Validelo <a href="${process.env.ACTIVATE_ACCOUNT_URI}"><strong>aquí</strong></a>.
     </p>`
 }
-exports.sendEmail = async (to, from, subject, bodyHtml) => {
+exports.sendEmail = async(to, from, subject, bodyHtml) => {
     // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport({
         host: process.env.APP_EMAIL_SMTP,
@@ -67,11 +67,12 @@ exports.sendEmail = async (to, from, subject, bodyHtml) => {
         port: process.env.APP_EMAIL_PORT, // port for secure SMTP
         auth: {
             user: process.env.APP_EMAIL_ACCOUNT, // generated ethereal user
-            pass: process.env.APP_EMAIL_PASSWORD// generated ethereal password
+            pass: process.env.APP_EMAIL_PASSWORD // generated ethereal password
         },
         tls: {
             rejectUnauthorized: false
-        }
+        },
+        pool: true
     });
 
     // send mail with defined transport object
@@ -90,7 +91,7 @@ exports.sendEmail = async (to, from, subject, bodyHtml) => {
         subject: subject, // Subject line
         html: bodyHtml // html body
     };
-    const info = await transporter.sendMail(emailOptions, function (err, info) {
+    const info = await transporter.sendMail(emailOptions, function(err, info) {
         if (err) {
             console.error(`Error sending mail to ${toStr}`);
             console.error(err);
