@@ -1,4 +1,18 @@
 var nodemailer = require("nodemailer");
+// create reusable transporter object using the default SMTP transport
+const transporter = nodemailer.createTransport({
+    host: process.env.APP_EMAIL_SMTP,
+    secure: false, // use SSL
+    port: process.env.APP_EMAIL_PORT, // port for secure SMTP
+    auth: {
+        user: process.env.APP_EMAIL_ACCOUNT, // generated ethereal user
+        pass: process.env.APP_EMAIL_PASSWORD // generated ethereal password
+    },
+    tls: {
+        rejectUnauthorized: false
+    },
+    pool: true
+});
 exports.sendNewUserEmail = async(name, email, code) => {
     const to = [{ name: name, email: email }];
     const from = [{ name: process.env.USER_MAIL_NAME, email: process.env.USER_MAIL_EMAIL }];
@@ -60,21 +74,6 @@ exports.templateActivateAccount = async(options) => {
     </p>`
 }
 exports.sendEmail = async(to, from, subject, bodyHtml) => {
-    // create reusable transporter object using the default SMTP transport
-    const transporter = nodemailer.createTransport({
-        host: process.env.APP_EMAIL_SMTP,
-        secure: false, // use SSL
-        port: process.env.APP_EMAIL_PORT, // port for secure SMTP
-        auth: {
-            user: process.env.APP_EMAIL_ACCOUNT, // generated ethereal user
-            pass: process.env.APP_EMAIL_PASSWORD // generated ethereal password
-        },
-        tls: {
-            rejectUnauthorized: false
-        },
-        pool: true
-    });
-
     // send mail with defined transport object
     let fromStr = '';
     from.forEach(user => {
