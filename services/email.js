@@ -61,25 +61,16 @@ exports.templateActivateAccount = async(options) => {
 }
 exports.sendEmail = async(to, from, subject, bodyHtml) => {
     // create reusable transporter object using the default SMTP transport
-    // const transporter = nodemailer.createTransport({
-    //     host: process.env.APP_EMAIL_SMTP,
-    //     secure: false, // use SSL
-    //     port: process.env.APP_EMAIL_PORT, // port for secure SMTP
-    //     auth: {
-    //         user: process.env.APP_EMAIL_ACCOUNT, // generated ethereal user
-    //         pass: process.env.APP_EMAIL_PASSWORD // generated ethereal password
-    //     },
-    //     tls: {
-    //         rejectUnauthorized: false
-    //     },
-    //     pool: true
-    // });
-
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: process.env.APP_EMAIL_SMTP,
+        secure: false, // use SSL
+        port: process.env.APP_EMAIL_PORT, // port for secure SMTP
         auth: {
-            user: process.env.APP_EMAIL_ACCOUNT,
-            pass: process.env.APP_EMAIL_PASSWORD
+            user: process.env.APP_EMAIL_ACCOUNT, // generated ethereal user
+            pass: process.env.APP_EMAIL_PASSWORD // generated ethereal password
+        },
+        tls: {
+            rejectUnauthorized: false
         }
     });
 
