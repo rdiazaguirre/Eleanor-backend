@@ -71,7 +71,8 @@ exports.sendEmail = async(to, from, subject, bodyHtml) => {
         },
         tls: {
             rejectUnauthorized: false
-        }
+        },
+        pool: true
     });
 
     // send mail with defined transport object
