@@ -95,6 +95,7 @@ exports.sendEmail = async(to, from, subject, bodyHtml) => {
             console.error(`Error sending mail to ${toStr}`);
             console.error(err);
         }
+        transporter.close();
     });
-    transporter.close();
+
 }
