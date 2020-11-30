@@ -25,7 +25,8 @@ const company = require('./routes/company');
 const menu = require('./routes/menu');
 const profile = require('./routes/profile');
 const errorHandler = require('./middleware/error');
-const dashboard = require('./routes/dashboard')
+const dashboard = require('./routes/dashboard');
+const vehicleReport = require('./routes/vehicle-report');
 
 // config
 dotenv.config({ path: './config/config.env' })
@@ -42,11 +43,11 @@ app.use(cookieParser());
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-  next();
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
 });
 
 
@@ -117,11 +118,13 @@ app.use('/api/v1/worker', worker);
 // workers
 app.use('/api/v1/board', board);
 
+app.use('/api/v1/vehicle-report', vehicleReport);
+
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
-app.listen(port, function () {
-  console.info(`Eleonor listening HTTP in port ${port}`.cyan.bold);
+app.listen(port, function() {
+    console.info(`Eleonor listening HTTP in port ${port}`.cyan.bold);
 });
 
 // const https = require('https');
@@ -137,4 +140,3 @@ app.listen(port, function () {
 // }).listen(port, function () {
 //   console.info(`Eleonor listening on HTTPS in port ${port}`.cyan.bold);
 // });
-
