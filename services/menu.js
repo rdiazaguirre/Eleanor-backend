@@ -1,4 +1,4 @@
-exports.getClientMenu = async () => {
+exports.getClientMenu = async() => {
     const response = [
         { id: 4, name: 'Configuraciones' },
         { id: 41, name: 'Mi Cuenta' },
@@ -6,7 +6,7 @@ exports.getClientMenu = async () => {
     ];
     return response;
 }
-exports.readAllMenus = async () => {
+exports.readAllMenus = async() => {
     const response = [
         { id: 1, name: 'Dashboard' },
         { id: 2, name: 'Ingreso de Vehículo' },
@@ -20,7 +20,8 @@ exports.readAllMenus = async () => {
         { id: 41, name: 'Mi Cuenta' },
         { id: 42, name: 'Usuarios' },
         { id: 43, name: 'Aprobar Cotizaciones' },
-        { id: 44, name: 'Mi Vehículo' }
+        { id: 44, name: 'Mi Vehículo' },
+        { id: 50, name: 'Listado de Vehículos' }
     ];
     return response;
 }

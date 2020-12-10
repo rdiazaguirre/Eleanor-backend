@@ -11,10 +11,7 @@ router.all('*', function(req, res, next) {
 });
 
 
-router.route('/:id')
-    .get(protect, vehicleReport);
-
 router.route('/')
-    .get(protect, realAll);
+    .get(protect, vehicleReport);
 
 module.exports = router;
