@@ -24,7 +24,8 @@ const QuotationSchema = new mongoose.Schema({
         createAt: Date,
     },
     companyId: String,
-    branchOfficeId: String
+    branchOfficeId: String,
+    aproveDate: Date
 });
 
 module.exports = QuotationSchema;

@@ -3,21 +3,22 @@ const { createAssigWork, getAssingWorkQuotationId, getAssingWorkFromQuotation, u
 const { updateBoard, readAllBoard } = require('./board');
 const { createCard } = require('./card');
 
-exports.createQuotation = async (model) => {
+exports.createQuotation = async(model) => {
     const response = await QuotationSchema.create(model);
     return response;
 }
 
-exports.removeQuotation = async (id) => {
+exports.removeQuotation = async(id) => {
     const response = await QuotationSchema.deleteOne({ _id: { $eq: id } });
     return response;
 }
 
-exports.updateQuotation = async (id, model) => {
+exports.updateQuotation = async(id, model) => {
     const response = await QuotationSchema.updateOne({ _id: id }, model);
     return response;
 }
-exports.aproveQuotation = async (id, model, user) => {
+exports.aproveQuotation = async(id, model, user) => {
+    model.aproveDate = Date.now();
     const response = await QuotationSchema.updateOne({ _id: id }, model);
     const quotation = await this.getQuotation(id);
 
@@ -29,7 +30,7 @@ exports.aproveQuotation = async (id, model, user) => {
 
     return response;
 }
-const _insertCard = async (quotation, createdBy, companyId, branchId, user) => {
+const _insertCard = async(quotation, createdBy, companyId, branchId, user) => {
     const board = await readAllBoard(companyId, createdBy, branchId);
     board.forEach(element => {
         element.stage.forEach(async itemStage => {
@@ -68,7 +69,7 @@ _newCard = (quotation, createdBy, companyId, user) => {
 
     return newCard;
 }
-_insertAssingWork = async (id, quotation, createdBy, companyId) => {
+_insertAssingWork = async(id, quotation, createdBy, companyId) => {
     const assingWork = await getAssingWorkQuotationId(id);
     const assingWorkToMongo = getAssingWorkFromQuotation(assingWork, quotation);
     if (assingWork) {
@@ -77,31 +78,30 @@ _insertAssingWork = async (id, quotation, createdBy, companyId) => {
         await createAssigWork(assingWorkToMongo);
     }
 }
-exports.getQuotation = async (id) => {
+exports.getQuotation = async(id) => {
     const response = await QuotationSchema.findOne({ _id: id });
     return response;
 }
 
-exports.getQuotations = async (companyId, branchId) => {
+exports.getQuotations = async(companyId, branchId) => {
     if (companyId === null) {
         return await QuotationSchema.find({
             branchOfficeId: { $eq: branchId }
         });
     }
-    const response = await QuotationSchema.find(
-        {
-            companyId: { $eq: companyId },
-            branchOfficeId: { $eq: branchId }
-        });
+    const response = await QuotationSchema.find({
+        companyId: { $eq: companyId },
+        branchOfficeId: { $eq: branchId }
+    });
     return response;
 }
 
-exports.getQuotationByEvaluationId = async (evaluationId) => {
+exports.getQuotationByEvaluationId = async(evaluationId) => {
     const response = await QuotationSchema.findOne({ evaluationId: { $eq: evaluationId } });
     return response;
 }
 
-exports.getQuotationByReceptionId = async (receptionId) => {
+exports.getQuotationByReceptionId = async(receptionId) => {
     const response = await QuotationSchema.findOne({ receptionId: receptionId });
     return response;
 }
