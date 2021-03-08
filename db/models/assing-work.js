@@ -11,6 +11,7 @@ const AssingWorkSchema = new mongoose.Schema({
     deliveryDate: Date,
     deliveryTime: Date,
     status: Number,
+    claimNumber: String,
     vehicle: Vehicle,
     damages: [{ vehiclePart: VehiclePart, comments: String, actionId: String, amount: Number }],
     workers: [Worker],
@@ -23,15 +24,13 @@ const AssingWorkSchema = new mongoose.Schema({
         startDate: { year: Number, month: Number, day: Number },
         endDate: { year: Number, month: Number, day: Number }
     },
-    works: [
-        {
-            workerId: String,
-            startDate: { year: Number, month: Number, day: Number },
-            endDate: { year: Number, month: Number, day: Number },
-            task: String,
-            finished: Boolean
-        }
-    ],
+    works: [{
+        workerId: String,
+        startDate: { year: Number, month: Number, day: Number },
+        endDate: { year: Number, month: Number, day: Number },
+        task: String,
+        finished: Boolean
+    }],
     companyId: String,
     branchOfficeId: String
 });

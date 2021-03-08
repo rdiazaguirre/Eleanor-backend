@@ -8,6 +8,7 @@ const EvaluationSchema = new mongoose.Schema({
     deliveryDate: Date,
     deliveryTime: Date,
     status: Number,
+    claimNumber: String,
     vehicle: Vehicle,
     damages: [{ vehiclePart: VehiclePart, comments: String, actionId: String }],
     workers: [Worker],

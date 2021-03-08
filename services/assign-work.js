@@ -4,46 +4,45 @@ const EvaluationSchema = require('../db/schemas/evaluation');
 const QuotationSchema = require('../db/schemas/quotation');
 const { readAllBoard, updateBoard } = require('../services/board');
 
-const readReception = async (id) => {
+const readReception = async(id) => {
     return await ReceptionDataSchema.findOne({ _id: { $eq: id } });
 }
-const updateReception = async (id, model) => {
+const updateReception = async(id, model) => {
     const response = await ReceptionDataSchema.updateOne({ _id: id }, model);
 }
-const getEvaluationByReceptionId = async (receptionId) => {
+const getEvaluationByReceptionId = async(receptionId) => {
     return await EvaluationSchema.findOne({ receptionId: { $eq: receptionId } });
 }
-const updateEvaluation = async (id, model, insertQuotation) => {
+const updateEvaluation = async(id, model, insertQuotation) => {
     const response = await EvaluationSchema.updateOne({ _id: id }, model);
     return response;
 }
-const getQuotationByReceptionId = async (receptionId) => {
+const getQuotationByReceptionId = async(receptionId) => {
     const response = await QuotationSchema.findOne({ receptionId: receptionId });
     return response;
 }
-const updateQuotation = async (id, model) => {
+const updateQuotation = async(id, model) => {
     const response = await QuotationSchema.updateOne({ _id: id }, model);
     return response;
 }
-exports.getAllAssigWorks = async (companyId, branchId) => {
+exports.getAllAssigWorks = async(companyId, branchId) => {
     if (companyId === null) {
         return await AssingWorkSchema.find({
             branchOfficeId: { $eq: branchId }
         });
     }
-    return await AssingWorkSchema.find(
-        {
-            companyId: { $eq: companyId },
-            branchOfficeId: { $eq: branchId }
-        });
+    return await AssingWorkSchema.find({
+        companyId: { $eq: companyId },
+        branchOfficeId: { $eq: branchId }
+    });
 }
 
-exports.createAssigWork = async (model) => {
+exports.createAssigWork = async(model) => {
     const response = await AssingWorkSchema.create(model);
     _updateWorkersFromAssignWork(response);
     return response;
 }
-_updateWorkersFromAssignWork = async (model) => {
+_updateWorkersFromAssignWork = async(model) => {
     // Asign workers to board card
     _assingWorkersToCard(model);
 
@@ -57,22 +56,22 @@ _updateWorkersFromAssignWork = async (model) => {
     _updateReceptionWorkers(model);
 
 }
-const _updateQuotationWorkers = async (model) => {
+const _updateQuotationWorkers = async(model) => {
     const quotation = await getQuotationByReceptionId(model.receptionId);
     quotation.workers = model.workers;
     updateQuotation(quotation._id, quotation);
 }
-const _updateEvaluationWorkers = async (model) => {
+const _updateEvaluationWorkers = async(model) => {
     const evaluation = await getEvaluationByReceptionId(model.receptionId);
     evaluation.workers = model.workers;
     updateEvaluation(evaluation._id, evaluation);
 }
-const _updateReceptionWorkers = async (model) => {
+const _updateReceptionWorkers = async(model) => {
     const reception = await readReception(model.receptionId);
     reception.workers = model.workers;
     updateReception(reception._id, reception);
 }
-const _assingWorkersToCard = async (model) => {
+const _assingWorkersToCard = async(model) => {
     const board = await readAllBoard(model.companyId, model.createdBy, model.branchOfficeId);
     if (board[0]) {
         board[0].stage.forEach(element => {
@@ -86,22 +85,22 @@ const _assingWorkersToCard = async (model) => {
         await updateBoard(board[0]._id, board[0]);
     }
 }
-exports.removeAssigWork = async (id) => {
+exports.removeAssigWork = async(id) => {
     const response = await AssingWorkSchema.deleteOne({ _id: { $eq: id } });
     return response;
 }
 
-exports.updateAssigWork = async (id, model) => {
+exports.updateAssigWork = async(id, model) => {
     const response = await AssingWorkSchema.updateOne({ _id: id }, model);
     _updateWorkersFromAssignWork(model);
     return response;
 }
 
-exports.getAssingWorkByReceptionId = async (receptionId) => {
+exports.getAssingWorkByReceptionId = async(receptionId) => {
     return await AssingWorkSchema.findOne({ receptionId: receptionId });
 }
 
-exports.getAssingWorkQuotationId = async (quotationId) => {
+exports.getAssingWorkQuotationId = async(quotationId) => {
     return await AssingWorkSchema.findOne({ quotationId: quotationId });
 }
 
@@ -118,6 +117,7 @@ exports.getAssingWorkFromQuotation = (assingWork, quotation) => {
         assingWork.planification = quotation.planification;
         assingWork.companyId = quotation.companyId;
         assingWork.branchOfficeId = quotation.branchOfficeId;
+        assingWork.claimNumber = quotation.claimNumber;
         return assingWork;
     } else {
         const response = {
@@ -136,7 +136,8 @@ exports.getAssingWorkFromQuotation = (assingWork, quotation) => {
             planification: quotation.planification,
             works: [],
             companyId: quotation.companyId,
-            branchOfficeId: quotation.branchOfficeId
+            branchOfficeId: quotation.branchOfficeId,
+            claimNumber: quotation.claimNumber
         };
         return response;
     }

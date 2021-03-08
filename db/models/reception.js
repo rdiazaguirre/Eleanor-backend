@@ -10,6 +10,7 @@ const ReceptionSchema = new mongoose.Schema({
     deliveryTime: Date,
     status: Number,
     vehicle: Vehicle,
+    claimNumber: String,
     assuranceCompany: {
         assuranceCompanyId: String,
         contact: {

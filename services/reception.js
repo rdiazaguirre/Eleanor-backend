@@ -5,18 +5,18 @@ const { removeQuotation, getQuotationByReceptionId } = require('./quotation');
 const { getAssingWorkByReceptionId, removeAssigWork } = require('./assign-work');
 const { readByEmail, createAndResponse, getNewUser } = require('./user');
 
-exports.updateReception = async (id, model) => {
+exports.updateReception = async(id, model) => {
     return await this.update(id, model);
 }
-exports.readReception = async (id) => {
+exports.readReception = async(id) => {
     return await this.get(id);
 }
 
-exports.readAllReception = async (companyId, branchOfficeId) => {
+exports.readAllReception = async(companyId, branchOfficeId) => {
     return await this.getAll(companyId, branchOfficeId);
 }
 
-exports.create = async (model) => {
+exports.create = async(model) => {
     const response = await ReceptionDataSchema.create(model);
 
     // Generate the evaluation
@@ -28,7 +28,7 @@ exports.create = async (model) => {
     return response;
 }
 
-exports.remove = async (id) => {
+exports.remove = async(id) => {
     const response = await ReceptionDataSchema.deleteOne({ _id: { $eq: id } });
 
     // Remove evaluation
@@ -54,11 +54,11 @@ exports.remove = async (id) => {
     return response;
 }
 
-exports.get = async (id) => {
+exports.get = async(id) => {
     return await ReceptionDataSchema.findOne({ _id: { $eq: id } });
 }
 
-exports.update = async (id, model) => {
+exports.update = async(id, model) => {
     const response = await ReceptionDataSchema.updateOne({ _id: id }, model);
     const evaluation = await getEvaluationByReceptionId(id);
     const reception = await this.get(id);
@@ -67,7 +67,7 @@ exports.update = async (id, model) => {
     return response;
 }
 
-exports.getAll = async (companyId, branchId) => {
+exports.getAll = async(companyId, branchId) => {
     if (companyId === null) {
         return await ReceptionDataSchema.find({
             branchOfficeId: { $eq: branchId }
@@ -98,7 +98,8 @@ const _getEvaluacionFromReception = (reception) => {
         createAt: new Date(),
         quoter: { Id: 0, email: '', phone: '' },
         companyId: reception.companyId,
-        branchOfficeId: reception.branchOfficeId
+        branchOfficeId: reception.branchOfficeId,
+        claimNumber: reception.claimNumber
     }
     response.damages.forEach(element => {
         element.actionId = 0;
@@ -106,7 +107,7 @@ const _getEvaluacionFromReception = (reception) => {
     return response;
 }
 
-const _generateUserFromCustomer = async (customer, companyId, createdBy, branchOfficeId) => {
+const _generateUserFromCustomer = async(customer, companyId, createdBy, branchOfficeId) => {
     let user = await readByEmail(customer.email);
     if (user !== null) {
         return;
@@ -133,7 +134,7 @@ const _generateUserFromCustomer = async (customer, companyId, createdBy, branchO
         console.error('error user created', reason);
     });
 }
-const _getbranchesOffices = async (companyId, branchOfficeId) => {
+const _getbranchesOffices = async(companyId, branchOfficeId) => {
     const company = await readCompany(companyId);
     for (let index = 0; index < company.branchesOffices.length; index++) {
         const item = company.branchesOffices[index];

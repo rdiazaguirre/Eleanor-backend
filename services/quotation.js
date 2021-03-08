@@ -121,6 +121,7 @@ exports.getQuotationFromEvaluation = (quotation, evaluation) => {
         quotation.quoter = evaluation.quoter;
         quotation.companyId = evaluation.companyId;
         quotation.branchOfficeId = evaluation.branchOfficeId;
+        quotation.claimNumber = evaluation.claimNumber;
         return quotation;
     } else {
         const response = {
@@ -142,7 +143,8 @@ exports.getQuotationFromEvaluation = (quotation, evaluation) => {
                 endDate: {}
             },
             companyId: evaluation.companyId,
-            branchOfficeId: evaluation.branchOfficeId
+            branchOfficeId: evaluation.branchOfficeId,
+            claimNumber: evaluation.claimNumber
         };
         response.damages.forEach(element => {
             element.amount = 0;
