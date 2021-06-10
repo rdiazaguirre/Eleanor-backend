@@ -24,7 +24,7 @@ exports.create = async(model) => {
     await createEvaluation(evaluationModel);
 
     // Send invitation mail to vehicle Owner(must be created a user to customer.)
-    _generateUserFromCustomer(response.persons.owner, response.companyId, model.createdBy, model.branchOfficeId);
+    //_generateUserFromCustomer(response.persons.owner, response.companyId, model.createdBy, model.branchOfficeId);
     return response;
 }
 
